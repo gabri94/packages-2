@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nginx
 PKG_VERSION:=1.10.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=nginx-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://nginx.org/download/
@@ -56,7 +56,10 @@ PKG_CONFIG_DEPENDS := \
 	CONFIG_NGINX_HTTP_CACHE \
 	CONFIG_NGINX_PCRE \
 	CONFIG_NGINX_NAXSI \
-	CONFIG_NGINX_LUA
+	CONFIG_NGINX_LUA \
+	CONFIG_NGINX_STREAM_CORE_MODULE \
+	CONFIG_NGINX_STREAM_SSL_PREREAD
+
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -191,6 +194,12 @@ ifneq ($(CONFIG_NGINX_HTTP_UPSTREAM_LEAST_CONN),y)
 endif
 ifneq ($(CONFIG_NGINX_HTTP_UPSTREAM_KEEPALIVE),y)
   ADDITIONAL_MODULES += --without-http_upstream_keepalive_module
+endif
+ifneq ($(CONFIG_NGINX_STREAM_CORE_MODULE),y)
+  ADDITIONAL_MODULES += --with-stream
+endif
+ifneq ($(CONFIG_NGINX_STREAM_SSL_PREREAD),y)
+  ADDITIONAL_MODULES += --with-stream_ssl_preread_module
 endif
 
 TARGET_CFLAGS += -fvisibility=hidden -ffunction-sections -fdata-sections -DNGX_LUA_NO_BY_LUA_BLOCK
