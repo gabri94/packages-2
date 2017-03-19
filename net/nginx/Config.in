@@ -202,4 +202,9 @@ config NGINX_HTTP_SECURE_LINK
 	prompt "Enable HTTP secure link module"
 	default n
 
+config NGINX_STREAM_CORE_MODULE
+	bool
+	prompt "Enable stream support"
+	default n
+
 endmenu

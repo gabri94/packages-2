@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nginx
 PKG_VERSION:=1.10.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=nginx-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://nginx.org/download/
@@ -60,7 +60,8 @@ PKG_CONFIG_DEPENDS := \
 	CONFIG_NGINX_NAXSI \
 	CONFIG_NGINX_LUA \
 	CONFIG_NGINX_HTTP_REAL_IP \
-	CONFIG_NGINX_HTTP_SECURE_LINK
+	CONFIG_NGINX_HTTP_SECURE_LINK \
+	CONFIG_NGINX_STREAM_CORE_MODULE
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -207,6 +208,9 @@ ifeq ($(CONFIG_NGINX_HTTP_REAL_IP),y)
 endif
 ifeq ($(CONFIG_NGINX_HTTP_SECURE_LINK),y)
   ADDITIONAL_MODULES += --with-http_secure_link_module
+endif
+ifneq ($(CONFIG_NGINX_STREAM_CORE_MODULE),y)
+  ADDITIONAL_MODULES += --with-stream
 endif
 
 TARGET_CFLAGS += -fvisibility=hidden -ffunction-sections -fdata-sections -DNGX_LUA_NO_BY_LUA_BLOCK
